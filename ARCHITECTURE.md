@@ -111,20 +111,6 @@ Translations live in `public/locals/en.json` and `ar.json`, loaded at runtime. C
 - **`renderWithProviders`** wraps components with test i18n + `FormProvider`.
 - **user-event v14** `setup()` for realistic interactions.
 
-## Possible improvements
-
-| Area | Idea |
-|------|------|
-| **Security** | Backend route that holds the API key; rate limiting and audit logging |
-| **i18n** | Type-safe keys (e.g. `i18next` resource typing); fix folder name `locals` → `locales` |
-| **Validation** | Shared Zod/Yup schema mirroring `FormData` for reuse in tests and a future API |
-| **Persistence** | Debounce `localStorage` writes; optional encryption or session-only storage |
-| **UX** | Confirm before leaving step with dirty fields; keyboard focus management on step change |
-| **AI** | Stream tokens into the modal; model name from env; remove debug `console.log` in `useAI` |
-| **Build** | Migrate to Vite for faster dev and clearer env story |
-| **Submission** | POST `FormData` to a real endpoint; show server validation errors |
-| **E2E** | Playwright/Cypress for full wizard + language switch |
-
 ## Related docs
 
 - [README.md](./README.md) — run instructions and API key setup
