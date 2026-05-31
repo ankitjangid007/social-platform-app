@@ -1,46 +1,93 @@
-# Getting Started with Create React App
+# Social Support Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A multi-step government financial assistance form built with React. It supports English and Arabic, saves progress in the browser, and offers optional AI writing help on step 3 (“Help me write”).
 
-## Available Scripts
+## Prerequisites
 
-In the project directory, you can run:
+- [Node.js](https://nodejs.org/) (LTS recommended)
+- npm (included with Node.js)
 
-### `npm start`
+## How to run the project
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. **Clone or download** the repository and open a terminal in the project root.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+2. **Install dependencies:**
 
-### `npm test`
+   ```bash
+   npm install --legacy-peer-deps
+   ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   The `--legacy-peer-deps` flag avoids peer-dependency conflicts with Create React App’s toolchain.
 
-### `npm run build`
+3. **Configure environment variables** (required for AI features — see below). At minimum, create a `.env` file in the project root before starting the dev server.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. **Start the development server:**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   ```bash
+   npm start
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   The app opens at [http://localhost:3000](http://localhost:3000). The page reloads when you edit source files.
 
-### `npm run eject`
+5. **Other useful commands:**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+   | Command | Description |
+   |---------|-------------|
+   | `npm test` | Run unit tests (interactive watch mode) |
+   | `npm test -- --watchAll=false` | Run tests once |
+   | `npm run build` | Create an optimized production build in `build/` |
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## OpenAI API key setup
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Step 3 includes **Help me write**, which calls an **OpenAI-compatible** chat completions API. The key is read from the environment at build/start time (Create React App only exposes variables prefixed with `REACT_APP_`).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### 1. Create a `.env` file
 
-## Learn More
+In the project root (same folder as `package.json`), create a file named `.env`:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```env
+REACT_APP_AI_API_KEY=your-api-key-here
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Replace `your-api-key-here` with your actual key.
+
+### 2. Choose a provider
+
+**Option A — OpenAI (direct)**
+
+1. Sign in at [platform.openai.com](https://platform.openai.com/).
+2. Create an API key under **API keys**.
+3. Add to `.env`:
+
+   ```env
+   REACT_APP_AI_API_KEY=sk-...
+   REACT_APP_AI_API_URL=https://api.openai.com/v1/chat/completions
+   ```
+
+**Option B — OpenRouter (default)**
+
+If you omit `REACT_APP_AI_API_URL`, the app uses OpenRouter’s endpoint:
+
+```env
+REACT_APP_AI_API_KEY=your-openrouter-key
+# REACT_APP_AI_API_URL is optional; defaults to OpenRouter
+```
+
+Get a key from [openrouter.ai](https://openrouter.ai/).
+
+### 3. Restart the dev server
+
+Environment variables are loaded when the app starts. After changing `.env`, stop the running server (`Ctrl+C`) and run `npm start` again.
+
+### 4. Verify in the app
+
+On **step 3**, each textarea has a **Help me write** button. If the key is missing, the button stays disabled and the UI shows that AI is not configured. With a valid key, clicking it generates a draft you can edit, accept, or discard.
+
+### Security notes
+
+- **Do not commit** `.env` or share your API key in version control.
+- Keys are bundled into the client build (standard for `REACT_APP_*` in CRA). Use a restricted key and provider quotas suitable for development or demos only.
+
+## Architecture
+
+For structure, design trade-offs, and possible follow-up work, see [ARCHITECTURE.md](./ARCHITECTURE.md).
